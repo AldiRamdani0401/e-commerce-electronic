@@ -100,7 +100,7 @@
                     <div class="d-flex justify-content-center p-1 gap-2">
                         <label for="username" class="d-flex justify-content-center p-2"
                             style="border:2px solid #8F7BBC;border-radius:100%;">
-                            <img src="assets/icon-user.png" width="20" height="20">
+                            <img src="assets/icons/icon-user.png" width="20" height="20">
                         </label>
                         <input type="text" id="username" class="input-1 text-center" placeholder="Username"
                             onfocus="selectInput(this)" onblur="checkInput()" autocomplete="off" required>
@@ -110,7 +110,7 @@
                     <div class="d-flex justify-content-center p-1 gap-2">
                         <label for="password" class="d-flex justify-content-center p-2"
                             style="border:2px solid #8F7BBC;border-radius:100%;">
-                            <img src="assets/icon-lock.png" class="mx-auto" width="20" height="20">
+                            <img src="assets/icons/icon-lock.png" class="mx-auto" width="20" height="20">
                         </label>
                         <input type="text" id="password" class="input-1 text-center" placeholder="Password"
                             onfocus="selectInput(this)" onblur="checkInput()" autocomplete="off" required>

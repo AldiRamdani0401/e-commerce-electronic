@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-    <title>login</title>
+    <title>Register</title>
 </head>
 
 <style>
@@ -50,16 +50,21 @@
 
 <script>
     // Form Data
+    let formData = {};
+
+    let next = false;
 
     // ## Render Component
 
     // Progress Bar Handler
     const progressBar = [];
-    let countStepBar = 1;
     const maxBarLength = 4;
+
+    let countStepBar = 1;
 
     function nextStepBar() {
         // console.log("nextStepBar");
+        if (!next) return;
         countStepBar < maxBarLength && countStepBar++;
         barRenderTemplate();
         templateInputForm();
@@ -68,7 +73,7 @@
     function backStepBar() {
         // console.log("backStepBar");
         countStepBar > 1 && countStepBar--;
-        console.log(countStepBar);
+
         barRenderTemplate();
         templateInputForm();
     }
@@ -131,6 +136,8 @@
         const inputElements = document.getElementsByTagName('input');
         const labelElements = document.getElementsByTagName('label');
 
+        let count = 0;
+
         Array.from(inputElements).forEach((input) => {
             Array.from(labelElements).forEach((label) => {
                 if (label.htmlFor === input.id) {
@@ -140,51 +147,101 @@
                     } else {
                         label.style.borderColor = '#6389B5';
                         label.style.borderWidth = '4px';
+                        formData = { ...formData, [input.id]: input.value }
+                        ++count;
+                        validationForm(input.value, input.getAttribute('type'), count, inputElements.length);
                     }
                 }
             });
         });
     }
 
+    // Sanitize Input
+    function sanitizeInput(value) {
+        return value.replace(/[<>/"'&\-\?*#^`|\\]+/g, (char) => {
+            switch (char) {
+                case '<': return '&lt;';
+                case '>': return '&gt;';
+                case '"': return '&quot;';
+                case "'": return '&#39;';
+                case '&': return '&amp;';
+                case '-': return '&#45;';
+                case '?': return '&#63;';
+                case '*': return '&#42;';
+                case '#': return '&#35;';
+                case '^': return '&#94;';
+                case '`': return '&#96;';
+                case '|': return '&#124;'
+                case '\\': return '&#92;'
+                default: return char;
+            }
+        });
+    }
+
+    function validationForm(value, type, count, max) {
+        // Sanitasi nilai input
+        let sanitizeValue = value;
+
+        // Gunakan sanitasi untuk setiap jenis input
+        switch (type) {
+            case 'text':
+                sanitizeValue = sanitizeInput(value.trim());
+                break;
+            case 'email':
+                sanitizeValue = sanitizeInput(value.trim().toLowerCase());
+                break;
+            case 'number':
+                sanitizeValue = value.trim();
+                if (isNaN(sanitizeValue)) {
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
+        if (max === count) next = true;
+    }
+
+    function dateAction(e) {
+        e.target.setAttribute('type', 'date');
+    }
+
+
     // Template Input Form
-    function templateInputForm() {
+    function templateInputForm(cb) {
         const container = document.getElementById('container-input-element');
 
         const variant = [
             {
                 title: 'Identitas Pengguna',
                 inputs: [
-                    { name: 'nama-lengkap', placeholder: 'Nama Lengkap', type: 'text' },
-                    { name: 'email', placeholder: 'Email Anda', type: 'email' },
-                    { name: 'nomor-telepon', placeholder: 'Nomor Handphone / Telepon Anda', type: 'number' },
-                    { name: 'tanggal-lahir', placeholder: 'Tanggal Lahir Anda', type: 'date' },
+                    { name: 'nama-lengkap', placeholder: 'Nama Lengkap', type: 'text', icon: 'assets/icons/icon-user.png' },
+                    { name: 'email', placeholder: 'Email Anda', type: 'email', icon: 'assets/icons/icon-mail.png' },
+                    { name: 'nomor-telepon', placeholder: 'Nomor Handphone / Telepon Anda', type: 'number', icon: 'assets/icons/icon-phone.png' },
+                    { name: 'tanggal-lahir', placeholder: 'Tanggal Lahir Anda', type: 'text', icon: 'assets/icons/icon-date.png' },
                 ]
             },
             {
                 title: 'Alamat Pengguna',
                 inputs: [
-                    { name: 'nama-lengkap', placeholder: 'Nama Lengkap' },
-                    { name: 'email', placeholder: 'Email Anda' },
-                    { name: 'nomor-telepon', placeholder: 'Email Anda' },
-                    { name: 'tanggal-lahir', placeholder: 'Tanggal Lahir Anda' },
+                    { name: 'provinsi', placeholder: 'Provinsi', type: 'text', icon: 'assets/icons/icon-province.png' },
+                    { name: 'kabupaten', placeholder: 'Kabupaten / Kota', type: 'text', icon: 'assets/icons/icon-city.png' },
+                    { name: 'kecamatan', placeholder: 'Kecamatan', type: 'text', icon: 'assets/icons/icon-district.png' },
+                    { name: 'desa-kelurahan', placeholder: 'Desa / Kelurahan', type: 'text', icon: 'assets/icons/icon-village.png' },
                 ]
             },
             {
                 title: 'Akun Pengguna',
                 inputs: [
-                    { name: 'nama-lengkap', placeholder: 'Nama Lengkap' },
-                    { name: 'email', placeholder: 'Email Anda' },
-                    { name: 'nomor-telepon', placeholder: 'Email Anda' },
-                    { name: 'tanggal-lahir', placeholder: 'Tanggal Lahir Anda' },
+                    { name: 'username', placeholder: 'Username Anda', type: 'text', icon: 'assets/icons/icon-user.png' },
+                    { name: 'password', placeholder: 'Password Anda', type: 'password', icon: 'assets/icons/icon-lock.png' },
+                    { name: 'conf-password', placeholder: 'Konfirmasi Password Anda', type: 'password', icon: 'assets/icons/icon-conf-password.png' },
                 ]
             },
             {
                 title: 'Verifikasi Pengguna',
                 inputs: [
-                    { name: 'nama-lengkap', placeholder: 'Nama Lengkap' },
-                    { name: 'email', placeholder: 'Email Anda' },
-                    { name: 'nomor-telepon', placeholder: 'Email Anda' },
-                    { name: 'tanggal-lahir', placeholder: 'Tanggal Lahir Anda' },
+                    { name: 'conf-verification-code', placeholder: 'XXXXXX', type: 'number' }
                 ]
             },
         ];
@@ -194,10 +251,11 @@
 
         variant[index].inputs.map((input) => {
             dom += `
+                    <div id="otp"></div>
                     <div class="d-flex p-1 gap-2">
-                        <label for="${input.name}" class="d-flex justify-content-center p-2"
+                        <label for="${input.name}" class="${input.icon ?? 'd-none'} d-flex justify-content-center p-2"
                             style="border:2px solid #8F7BBC;border-radius:100%;">
-                            <img src="assets/icon-user.png" width="20" height="20">
+                            <img src="${input.icon}" width="20" height="20">
                         </label>
                         <input type="${input.type}" id="${input.name}" class="input-1 w-100" placeholder="${input.placeholder}"
                             onfocus="selectInput(this)" onblur="checkInput()" autocomplete="off" required>
@@ -212,6 +270,65 @@
             ${dom}
         `;
         container.innerHTML = formElement;
+
+        // Verification Code
+        const element = document.getElementById('conf-verification-code');
+        if (element) {
+            let count = 2;
+            let OTP = 555555;
+
+            // Fungsi untuk mendapatkan OTP baru
+            const getOTP = () => {
+                console.log('getOTP jalan..');
+                OTP = Math.floor(100000 + Math.random() * 900000);
+                count = 2;
+                updateOTP();
+                otpInterval = setInterval(updateOTP, 1000);
+            };
+
+            const updateOTP = () => {
+                if (count >= 0) {
+                    document.getElementById('btn-back').disabled = true;
+                    document.getElementById('otp').innerHTML = `
+                    <div class="d-flex flex-column">
+                        <h3 class="text-center fs-3">OTP : ${count} detik</h3>
+                        <h1 class="text-center fs-1 fw-bold">${OTP}</h1>
+                    </div>
+                `;
+                    count--;
+                } else {
+                    clearInterval(otpInterval);
+                    OTP = '';
+                    document.getElementById('btn-back').disabled = false;
+                    document.getElementById('otp').innerHTML = `
+                        <div class="d-flex flex-row justify-content-center gap-3 mx-auto">
+                            <h3 class="text-center fs-3 m-0">OTP : <strong class="text-danger">EXPIRED</strong></h3>
+                            <button id="btn-otp" type="button" class="fw-bold" style="width:fit-content;">Send again</button>
+                        </div>
+                    `;
+
+                    const btnOTP = document.getElementById('btn-otp');
+                    if (btnOTP) btnOTP.addEventListener('click', getOTP);
+                }
+            };
+
+            // Memperbarui OTP setiap detik
+            let otpInterval = setInterval(updateOTP, 1000);
+
+            element.classList.add('text-center');
+            element.style.fontSize = "30px";
+            element.addEventListener('keypress', (e) => {
+                const value = e.target.value;
+                if (value.length >= 6) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Callback
+        if (typeof cb !== 'function') return;
+        cb();
+
     }
 
 </script>
@@ -236,16 +353,16 @@
                 </div>
                 <!-- Button -->
                 <div class="d-flex justify-content-center gap-2">
-                    <button type="button" class="btn w-100 text-white"
+                    <button id="btn-back" type="button" class="btn w-100 text-white"
                         style="border-radius:20px;background-color:orange;font-weight:bold;"
                         onclick="backStepBar()">Back</button>
-                    <button type="button" class="btn w-100 text-white"
+                    <button id="btn-next" type="button" class="btn w-100 text-white"
                         style="border-radius:20px;background-color:orange;font-weight:bold;"
                         onclick="nextStepBar()">Next</button>
                 </div>
             </form>
-            <div class="d-flex flex-row justify-content-center gap-4 w-100 mb-5">
-                <a href="/" class="nav-login fs-5 text-white text-decoration-none">Kembali</a>
+            <div class="d-flex justify-content-center w-25 my-3" style="border-radius:20px;background-color:orange;">
+                <a href="/" class="fs-5 text-white text-decoration-none">Kembali</a>
             </div>
         </div>
     </div>
@@ -254,7 +371,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         barRenderTemplate();
-        templateInputForm();
+        templateInputForm(() => {
+            document.getElementById('tanggal-lahir').addEventListener('click', (e) => dateAction(e));
+        });
     });
 </script>
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-    <title>login</title>
+    <title>Login | Electronic</title>
 </head>
 
 <style>
@@ -46,6 +46,23 @@
     .secondary-container {
         background-color: #6389B5;
     }
+
+    /* Mobile */
+    @media only screen and (min-width: 600px) {
+
+    }
+
+    /* Mobi */
+    @media only screen and (min-width: 768px) {
+
+    }
+
+    /* Laptop */
+    @media only screen and (min-width: 992px) {
+        img#logo {
+            width: 500px;
+        }
+    }
 </style>
 
 <script>
@@ -81,9 +98,9 @@
 </script>
 
 <body>
-    <div class="container-sm d-flex flex-column px-0 pt-5 w-100 vh-100">
+    <div class="container-sm d-flex flex-column align-items-center flex-md-row px-0 pt-5 w-100 vh-100">
         <div class="text-center">
-            <img src="assets/logo.png" width="272" alt="gambar logo">
+            <img id="logo" src="assets/logo.png" width="272" alt="gambar logo">
         </div>
         <div id="container-form-login"
             class="secondary-container container-fluid d-flex flex-column justify-content-between align-items-center h-100">
@@ -96,7 +113,7 @@
                     <div class="d-flex justify-content-center p-1 gap-2">
                         <label for="username" class="d-flex justify-content-center p-2"
                             style="border:2px solid #8F7BBC;border-radius:100%;">
-                            <img src="assets/icon-user.png" width="20" height="20">
+                            <img src="assets/icons/icon-user.png" width="20" height="20">
                         </label>
                         <input type="text" id="username" class="input-1 text-center" placeholder="Username"
                             onfocus="selectInput(this)" onblur="checkInput()" autocomplete="off" required>
@@ -106,7 +123,7 @@
                     <div class="d-flex justify-content-center p-1 gap-2">
                         <label for="password" class="d-flex justify-content-center p-2"
                             style="border:2px solid #8F7BBC;border-radius:100%;">
-                            <img src="assets/icon-lock.png" class="mx-auto" width="20" height="20">
+                            <img src="assets/icons/icon-lock.png" class="mx-auto" width="20" height="20">
                         </label>
                         <input type="text" id="password" class="input-1 text-center" placeholder="Password"
                             onfocus="selectInput(this)" onblur="checkInput()" autocomplete="off" required>
@@ -119,7 +136,8 @@
                 </div>
             </form>
             <div class="d-flex flex-row justify-content-center gap-4 w-100 mb-5">
-                <a href="/forgot-password.php" class="nav-login fs-5 text-white text-decoration-none">Forgot password?</a>
+                <a href="/forgot-password.php" class="nav-login fs-5 text-white text-decoration-none">Forgot
+                    password?</a>
                 <a href="/register.php" class="nav-login fs-5 text-white text-decoration-none">Register</a>
             </div>
         </div>
